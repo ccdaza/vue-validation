@@ -17,7 +17,7 @@
 			"<h2>Mi formulario</h2>"+
 			"<div v-validation:msg=''>"+
 			'<input type="text" name="nombre" placeholder="Nombre" class="validation" v-model="nombre" data-validations=\'["required", "min:3", "max:25", "onlyChar"]\' >'+
-			'<div class="msg" errors="nombre"><p error="required">necesito algo</p></div>'+
+			'<div class="msg" errors="nombre"><p error="required">necesito algo</p><p error="min">require mas de 3 letras</p></div>'+
 			'<hr>'+
 			'<input type="number" name="edad" placeholder="Edad" class="validation" v-model="edad" data-validations=\'["required", "min:3", "max:25"]\' ><hr>'+
 			'<input type="text" name="tel" placeholder="Telefono" class="validation" v-model="telefono" data-validations=\'["required", "onlyNumber"]\' ><hr>'+
@@ -270,11 +270,13 @@
 		}
 		
 		function hiddenErrorsBox(element, error){
+			console.log(error)
 			var boxErrors = parent.querySelectorAll('[errors="'+element.getAttribute('name')+'"]')
 			if(boxErrors.length){
 				var hidden = 0;
+				var allChildrens = boxErrors[0].children
 				if(error === undefined){
-					childrens = boxErrors[0].children
+					childrens = allChildrens
 				}else{
 					childrens = boxErrors[0].querySelectorAll('[error="'+error+'"]');
 				}
@@ -284,13 +286,14 @@
 					childrens[child].style.display = "none"
 				}
 				
-				if(hidden == childrens.length){
+				if(hidden == allChildrens.length){
 					boxErrors[0].style.display = "none"
 				}
 			}
 		}
 		
 		function showErrorsBox(element, error){
+			console.log(error)
 			var boxErrors = parent.querySelectorAll('[errors="'+element.getAttribute('name')+'"]')
 			if(boxErrors.length){
 				boxErrors[0].style.display = "block"
