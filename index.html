@@ -93,7 +93,7 @@
 		
 		function errorsCheckbox(el, errors){
 			name = el.getAttribute('depend')
-			checkbox = el.parentNode.querySelectorAll('[name="'+name+'"]')
+			var checkbox = el.parentNode.querySelectorAll('[name="'+name+'"]')
 			var validation = true
 			if(errors > 0){validation = false}
 			for(var c = 0; c < checkbox.length; c++){
@@ -114,7 +114,7 @@
 		
 		function requiredIf(depend, el){
 			var error = 0;
-			var elDepend = el.parentNode.querySelectorAll('[name="'+depend+'"]')
+			var elDepend = parent.querySelectorAll('[name="'+depend+'"]')
 			if(elDepend[0].checked && !el.checked){
 				error = 1;
 			}
@@ -123,7 +123,7 @@
 		
 		function requiredIfNot(depend, el){
 			var error = 0;
-			var elDepend = el.parentNode.querySelectorAll('[name="'+depend+'"]')
+			var elDepend = parent.querySelectorAll('[name="'+depend+'"]')
 			if(!elDepend[0].checked && !el.checked ){
 				error = 1;
 			}
