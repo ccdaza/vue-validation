@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Document</title>
-	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<script src="vue.js"></script>
 </head>
 <body>
 	<div id="app">
@@ -15,8 +15,10 @@
 		Vue.component('formulario', {
 			template : "<form>"+
 			"<h2>Mi formulario</h2>"+
-			"<div v-validation=''>"+
-			'<input type="text" name="nombre" placeholder="Nombre" class="validation" v-model="nombre" data-validations=\'["required", "min:3", "max:25", "onlyChar"]\' ><hr>'+
+			"<div v-validation:msg=''>"+
+			'<input type="text" name="nombre" placeholder="Nombre" class="validation" v-model="nombre" data-validations=\'["required", "min:3", "max:25", "onlyChar"]\' >'+
+			'<div class="msg" errors="nombre"><p error="required">necesito algo</p></div>'+
+			'<hr>'+
 			'<input type="number" name="edad" placeholder="Edad" class="validation" v-model="edad" data-validations=\'["required", "min:3", "max:25"]\' ><hr>'+
 			'<input type="text" name="tel" placeholder="Telefono" class="validation" v-model="telefono" data-validations=\'["required", "onlyNumber"]\' ><hr>'+
 			'<input type="radio" name="genero" value="m" v-model="genero"  class="validation" data-validations=\'["required"]\'>'+
@@ -107,6 +109,9 @@
 			var error = 0;
 			if(el.value == "" || el.value == 0 || (el.getAttribute('type') == 'checkbox' && !el.checked) ||  (el.getAttribute('type') == 'radio' && !el.checked)){
 				error = 1;
+				showErrorsBox(el, "required")
+			}else{
+				hiddenErrorsBox(el, "required")
 			}
 			return error;
 			
@@ -117,6 +122,9 @@
 			var elDepend = parent.querySelectorAll('[name="'+depend+'"]')
 			if(elDepend[0].checked && !el.checked){
 				error = 1;
+				showErrorsBox(el, "requiredIf")
+			}else{
+				hiddenErrorsBox(el, "requiredIf")
 			}
 			return error;
 		}
@@ -136,7 +144,10 @@
 			
 		 	if(!expresion.test(el.value)){
 		 		error = 1;
-		 	}
+		 		showErrorsBox(el, "onlyChar")
+			}else{
+				hiddenErrorsBox(el, "onlyChar")
+			}
 		 	return error;
 		 	
 		}
@@ -147,7 +158,10 @@
 			
 		 	if(!expresion.test(el.value)){
 		 		error = 1;
-		 	}
+		 		showErrorsBox(el, "onlyNumber")
+			}else{
+				hiddenErrorsBox(el, "onlyNumber")
+			}
 		 	return error;
 		 	
 		}
@@ -157,11 +171,17 @@
 			if(el.getAttribute('type') == "number"){
 				if(parseInt(el.value) < min){
 			 		var error = 1;
-			 	}
+			 		showErrorsBox(el, "min")
+				}else{
+					hiddenErrorsBox(el, "min")
+				}
 			}else{
 				if(el.value.length < min){
 			 		var error = 1;
-			 	}
+			 		showErrorsBox(el, "min")
+				}else{
+					hiddenErrorsBox(el, "min")
+				}
 			}	 	
 		 	return error;
 		}
@@ -171,11 +191,17 @@
 			if(el.getAttribute('type') == "number"){
 				if(parseInt(el.value) > max){
 			 		var error = 1;
-			 	}
+			 		showErrorsBox(el, "max")
+				}else{
+					hiddenErrorsBox(el, "max")
+				}
 			}else{
 				if(el.value.length > max){
 			 		var error = 1;
-			 	}
+			 		showErrorsBox(el, "max")
+				}else{
+					hiddenErrorsBox(el, "max")
+				}
 			}
 		 	return error;
 		}
@@ -186,10 +212,14 @@
 			
 		 	if(!expresion.test(value)){
 		 		error = 1;
-		 	}
+		 		showErrorsBox(el, "email")
+			}else{
+				hiddenErrorsBox(el, "email")
+			}
 		 	return error;
 		 	
 		}
+		
 		
 		function addEventElements(element){
 			var tag = element.tagName;
@@ -239,6 +269,38 @@
 			
 		}
 		
+		function hiddenErrorsBox(element, error){
+			var boxErrors = parent.querySelectorAll('[errors="'+element.getAttribute('name')+'"]')
+			if(boxErrors.length){
+				var hidden = 0;
+				if(error === undefined){
+					childrens = boxErrors[0].children
+				}else{
+					childrens = boxErrors[0].querySelectorAll('[error="'+error+'"]');
+				}
+				
+				for(child = 0; child < childrens.length; child++){
+					hidden += 1;
+					childrens[child].style.display = "none"
+				}
+				
+				if(hidden == childrens.length){
+					boxErrors[0].style.display = "none"
+				}
+			}
+		}
+		
+		function showErrorsBox(element, error){
+			var boxErrors = parent.querySelectorAll('[errors="'+element.getAttribute('name')+'"]')
+			if(boxErrors.length){
+				boxErrors[0].style.display = "block"
+				childrens = boxErrors[0].querySelectorAll('[error="'+error+'"]');
+				for(child = 0; child < childrens.length; child++){
+					childrens[child].style.display = "block"
+				}
+			}
+		}
+		
 		var parent;
 		
 		Vue.directive('validation', {		
@@ -249,6 +311,7 @@
 				var elements = el.getElementsByClassName('validation');
 				
 				for (var obj = 0; obj < elements.length; obj++){
+					hiddenErrorsBox(elements[obj])					
 					addEventElements(elements[obj])	
 					validateInit(elements[obj])
 				}
