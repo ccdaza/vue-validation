@@ -83,7 +83,7 @@
 		
 		function errorsRadio(el, errors){
 			name = el.getAttribute('name')
-			var radios = el.parentNode.querySelectorAll('[name="'+name+'"]')
+			var radios = parent.querySelectorAll('[name="'+name+'"]')
 			var validation = true
 			if(errors > 0){validation = false}
 			for(var r = 0; r < radios.length; r++){
@@ -93,7 +93,7 @@
 		
 		function errorsCheckbox(el, errors){
 			name = el.getAttribute('depend')
-			var checkbox = el.parentNode.querySelectorAll('[name="'+name+'"]')
+			var checkbox = parent.querySelectorAll('[name="'+name+'"]')
 			var validation = true
 			if(errors > 0){validation = false}
 			for(var c = 0; c < checkbox.length; c++){
