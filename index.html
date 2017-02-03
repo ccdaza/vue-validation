@@ -83,7 +83,7 @@
 		
 		function errorsRadio(el, errors){
 			name = el.getAttribute('name')
-			radios = el.parentNode.querySelectorAll('[name="'+name+'"]')
+			var radios = el.parentNode.querySelectorAll('[name="'+name+'"]')
 			var validation = true
 			if(errors > 0){validation = false}
 			for(var r = 0; r < radios.length; r++){
