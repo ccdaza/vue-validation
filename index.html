@@ -31,7 +31,7 @@
 			"</form>",
 			data:function(){
 				return {
-					nombre:"cristian",
+					nombre:"",
 					edad:'10',	
 					genero:"",
 					telefono:"",
@@ -242,6 +242,8 @@
 			var event = new CustomEvent(eventElement, {});
 			element.dispatchEvent(event, true);
 			
+			hiddenErrorsBox(element)	
+			
 		}
 		function validateAll(){
 			var elements = parent.getElementsByClassName('validation');
@@ -270,18 +272,18 @@
 		}
 		
 		function hiddenErrorsBox(element, error){
-			console.log(error)
 			var boxErrors = parent.querySelectorAll('[errors="'+element.getAttribute('name')+'"]')
 			if(boxErrors.length){
 				var hidden = 0;
 				var allChildrens = boxErrors[0].children
+				var childrens = ''
 				if(error === undefined){
 					childrens = allChildrens
 				}else{
 					childrens = boxErrors[0].querySelectorAll('[error="'+error+'"]');
 				}
 				
-				for(child = 0; child < childrens.length; child++){
+				for(var child = 0; child < childrens.length; child++){
 					hidden += 1;
 					childrens[child].style.display = "none"
 				}
@@ -291,14 +293,13 @@
 				}
 			}
 		}
-		
+
 		function showErrorsBox(element, error){
-			console.log(error)
 			var boxErrors = parent.querySelectorAll('[errors="'+element.getAttribute('name')+'"]')
 			if(boxErrors.length){
 				boxErrors[0].style.display = "block"
-				childrens = boxErrors[0].querySelectorAll('[error="'+error+'"]');
-				for(child = 0; child < childrens.length; child++){
+				var childrens = boxErrors[0].querySelectorAll('[error="'+error+'"]');
+				for(var child = 0; child < childrens.length; child++){
 					childrens[child].style.display = "block"
 				}
 			}
@@ -314,7 +315,7 @@
 				var elements = el.getElementsByClassName('validation');
 				
 				for (var obj = 0; obj < elements.length; obj++){
-					hiddenErrorsBox(elements[obj])					
+									
 					addEventElements(elements[obj])	
 					validateInit(elements[obj])
 				}
