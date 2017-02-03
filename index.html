@@ -105,7 +105,7 @@
 		function required(el){
 			
 			var error = 0;
-			if(el.value == "" || el.value == 0 || (el.getAttribute('type') == 'checkbox' && !el.checked)){
+			if(el.value == "" || el.value == 0 || (el.getAttribute('type') == 'checkbox' && !el.checked) ||  (el.getAttribute('type') == 'radio' && !el.checked)){
 				error = 1;
 			}
 			return error;
